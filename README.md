@@ -145,9 +145,9 @@ This Part provides an overview of the unit tests for the Candidate Hub API. Unit
 ## Total Time Spent 
 
 - as per time tracking for each task and subtask during the development process
--- Development (5 hrs).
--- Documentations (1 hrs).
--- Testing (1 hr).
-total time spent to finish the assesment is 7 hours.
+	- Development (5 hrs).
+	- Documentations (1 hrs).
+	- Testing (1 hr).
+total time spent to finish the assessment is 7 hours.
 
 
