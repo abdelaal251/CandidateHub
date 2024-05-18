@@ -23,7 +23,7 @@ This project is a web application API for storing and managing job candidate inf
 
 ## Setup Instructions
 
-# .NET Setup
+### .NET Setup
 
 1. Clone the Repository
    ```sh
