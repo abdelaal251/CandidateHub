@@ -5,6 +5,8 @@ VisualStudioVersion = 17.9.34902.65
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CandidateHub.API", "CandidateHub\CandidateHub.API.csproj", "{018201C7-5A50-4E03-989F-016C3ADF20E0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CandidateHub.Tests", "CandidateHub.Tests\CandidateHub.Tests.csproj", "{A1EB371D-89C7-4AEC-A988-C822284A6878}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{018201C7-5A50-4E03-989F-016C3ADF20E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{018201C7-5A50-4E03-989F-016C3ADF20E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{018201C7-5A50-4E03-989F-016C3ADF20E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1EB371D-89C7-4AEC-A988-C822284A6878}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1EB371D-89C7-4AEC-A988-C822284A6878}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1EB371D-89C7-4AEC-A988-C822284A6878}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1EB371D-89C7-4AEC-A988-C822284A6878}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
