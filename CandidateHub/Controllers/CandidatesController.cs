@@ -27,17 +27,7 @@ namespace CandidateHub.API.Controllers
             return Ok();
         }
 
-        [HttpDelete("{email}")]
-        public async Task<IActionResult> DeleteCandidate(string email)
-        {
-            if (string.IsNullOrEmpty(email))
-            {
-                return BadRequest("Email is required.");
-            }
-
-            await _candidateService.DeleteCandidateAsync(email);
-            return NoContent();
-        }
+        
 
         [HttpGet]
         public async Task<IActionResult> GetAllCandidates()
@@ -61,6 +51,18 @@ namespace CandidateHub.API.Controllers
             }
 
             return Ok(candidate);
+        }
+
+        [HttpDelete("{email}")]
+        public async Task<IActionResult> DeleteCandidate(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                return BadRequest("Email is required.");
+            }
+
+            await _candidateService.DeleteCandidateAsync(email);
+            return NoContent();
         }
     }
 }
