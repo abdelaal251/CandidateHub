@@ -1,5 +1,5 @@
-﻿using JobCandidateHub.API.Interfaces;
-using JobCandidateHub.API.Models;
+﻿using CandidateHub.API.Interfaces;
+using CandidateHub.API.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CandidateHub.API.Controllers

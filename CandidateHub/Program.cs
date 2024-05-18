@@ -1,4 +1,4 @@
-using JobCandidateHub.API.Data;
+using CandidateHub.API.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

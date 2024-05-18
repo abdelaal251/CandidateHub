@@ -1,9 +1,9 @@
-﻿using JobCandidateHub.API.Data;
-using JobCandidateHub.API.Interfaces;
-using JobCandidateHub.API.Models;
+﻿using CandidateHub.API.Data;
+using CandidateHub.API.Interfaces;
+using CandidateHub.API.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace JobCandidateHub.API.Services
+namespace CandidateHub.API.Services
 {
     public class CandidateService : ICandidateService
     {

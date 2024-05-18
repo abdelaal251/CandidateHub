@@ -1,4 +1,4 @@
-﻿namespace JobCandidateHub.API.Models
+﻿namespace CandidateHub.API.Models
 {
     public class Candidate
     {

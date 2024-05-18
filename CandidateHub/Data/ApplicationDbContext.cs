@@ -1,7 +1,7 @@
-﻿using JobCandidateHub.API.Models;
+﻿using CandidateHub.API.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace JobCandidateHub.API.Data
+namespace CandidateHub.API.Data
 {
     public class ApplicationDbContext : DbContext
     {

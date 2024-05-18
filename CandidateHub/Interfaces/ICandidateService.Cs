@@ -1,6 +1,6 @@
-﻿using JobCandidateHub.API.Models;
+﻿using CandidateHub.API.Models;
 
-namespace JobCandidateHub.API.Interfaces
+namespace CandidateHub.API.Interfaces
 {
     public interface ICandidateService
     {
