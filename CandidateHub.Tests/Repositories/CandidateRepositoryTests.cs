@@ -2,15 +2,13 @@
 using System.Linq;
 using System.Threading.Tasks;
 using CandidateHub.API.Data;
-using CandidateHub.API.Interfaces;
 using CandidateHub.API.Models;
 using CandidateHub.API.Repositories;
-using CandidateHub.API.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Xunit;
 
-public class CandidateServiceTests
+public class CandidateRepositoryTests
 {
     private ApplicationDbContext GetDatabaseContext(string dbName)
     {
@@ -62,10 +60,9 @@ public class CandidateServiceTests
         SeedDatabase(dbContext);
         var cache = new MemoryCache(new MemoryCacheOptions());
         var candidateRepository = new CandidateRepository(dbContext, cache);
-        var candidateService = new CandidateService(candidateRepository);
 
         // Act
-        var result = await candidateService.GetAllCandidatesAsync();
+        var result = await candidateRepository.GetAllCandidatesAsync();
 
         // Assert
         Assert.Equal(2, result.Count());
@@ -85,11 +82,10 @@ public class CandidateServiceTests
         SeedDatabase(dbContext);
         var cache = new MemoryCache(new MemoryCacheOptions());
         var candidateRepository = new CandidateRepository(dbContext, cache);
-        var candidateService = new CandidateService(candidateRepository);
         var email = "john.doe@example.com";
 
         // Act
-        var result = await candidateService.GetCandidateByEmailAsync(email);
+        var result = await candidateRepository.GetCandidateByEmailAsync(email);
 
         // Assert
         Assert.NotNull(result);
@@ -103,14 +99,13 @@ public class CandidateServiceTests
     }
 
     [Fact]
-    public async Task CreateOrUpdateCandidateAsync_ShouldAddCandidate()
+    public async Task AddCandidateAsync_ShouldAddCandidate()
     {
         // Arrange
-        var dbContext = GetDatabaseContext("CreateOrUpdateCandidateAsync_ShouldAddCandidate");
+        var dbContext = GetDatabaseContext("AddCandidateAsync_ShouldAddCandidate");
         SeedDatabase(dbContext);
         var cache = new MemoryCache(new MemoryCacheOptions());
         var candidateRepository = new CandidateRepository(dbContext, cache);
-        var candidateService = new CandidateService(candidateRepository);
         var newCandidate = new Candidate
         {
             FirstName = "Alice",
@@ -124,8 +119,8 @@ public class CandidateServiceTests
         };
 
         // Act
-        await candidateService.CreateOrUpdateCandidateAsync(newCandidate);
-        var result = await candidateService.GetCandidateByEmailAsync(newCandidate.Email);
+        await candidateRepository.AddCandidateAsync(newCandidate);
+        var result = await candidateRepository.GetCandidateByEmailAsync(newCandidate.Email);
 
         // Assert
         Assert.NotNull(result);
@@ -143,6 +138,36 @@ public class CandidateServiceTests
     }
 
     [Fact]
+    public async Task UpdateCandidateAsync_ShouldUpdateCandidate()
+    {
+        // Arrange
+        var dbContext = GetDatabaseContext("UpdateCandidateAsync_ShouldUpdateCandidate");
+        SeedDatabase(dbContext);
+        var cache = new MemoryCache(new MemoryCacheOptions());
+        var candidateRepository = new CandidateRepository(dbContext, cache);
+        var existingCandidate = await candidateRepository.GetCandidateByEmailAsync("john.doe@example.com");
+        existingCandidate.FirstName = "UpdatedFirstName";
+
+        // Act
+        await candidateRepository.UpdateCandidateAsync(existingCandidate);
+        var result = await candidateRepository.GetCandidateByEmailAsync("john.doe@example.com");
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal("UpdatedFirstName", result.FirstName);
+
+        // Verify cache invalidation and update
+        var allCandidatesCacheKey = "GetAllCandidates";
+        IEnumerable<Candidate> cachedCandidates;
+        Assert.False(cache.TryGetValue(allCandidatesCacheKey, out cachedCandidates));
+
+        var candidateCacheKey = $"Candidate_{existingCandidate.Email}";
+        Candidate cachedCandidate;
+        Assert.True(cache.TryGetValue(candidateCacheKey, out cachedCandidate));
+        Assert.Equal("UpdatedFirstName", cachedCandidate.FirstName);
+    }
+
+    [Fact]
     public async Task DeleteCandidateAsync_ShouldRemoveCandidate()
     {
         // Arrange
@@ -150,12 +175,11 @@ public class CandidateServiceTests
         SeedDatabase(dbContext);
         var cache = new MemoryCache(new MemoryCacheOptions());
         var candidateRepository = new CandidateRepository(dbContext, cache);
-        var candidateService = new CandidateService(candidateRepository);
         var email = "john.doe@example.com";
 
         // Act
-        await candidateService.DeleteCandidateAsync(email);
-        var result = await candidateService.GetCandidateByEmailAsync(email);
+        await candidateRepository.DeleteCandidateAsync(email);
+        var result = await candidateRepository.GetCandidateByEmailAsync(email);
 
         // Assert
         Assert.Null(result);

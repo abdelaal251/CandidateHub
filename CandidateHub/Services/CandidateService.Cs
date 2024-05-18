@@ -1,29 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using CandidateHub.API.Data;
 using CandidateHub.API.Interfaces;
 using CandidateHub.API.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace CandidateHub.API.Services
 {
     public class CandidateService : ICandidateService
     {
-        private readonly ApplicationDbContext _context;
-        private readonly IMemoryCache _cache;
-        private readonly TimeSpan _cacheExpiration = TimeSpan.FromMinutes(5);
+        private readonly ICandidateRepository _candidateRepository;
 
-        public CandidateService(ApplicationDbContext context, IMemoryCache cache)
+        public CandidateService(ICandidateRepository candidateRepository)
         {
-            _context = context;
-            _cache = cache;
+            _candidateRepository = candidateRepository;
+        }
+
+        public async Task<IEnumerable<Candidate>> GetAllCandidatesAsync()
+        {
+            return await _candidateRepository.GetAllCandidatesAsync();
+        }
+
+        public async Task<Candidate> GetCandidateByEmailAsync(string email)
+        {
+            return await _candidateRepository.GetCandidateByEmailAsync(email);
         }
 
         public async Task CreateOrUpdateCandidateAsync(Candidate candidate)
         {
-            var existingCandidate = await _context.Candidates.SingleOrDefaultAsync(c => c.Email == candidate.Email);
+            var existingCandidate = await _candidateRepository.GetCandidateByEmailAsync(candidate.Email);
             if (existingCandidate != null)
             {
                 existingCandidate.FirstName = candidate.FirstName;
@@ -33,54 +36,17 @@ namespace CandidateHub.API.Services
                 existingCandidate.LinkedInProfileUrl = candidate.LinkedInProfileUrl;
                 existingCandidate.GitHubProfileUrl = candidate.GitHubProfileUrl;
                 existingCandidate.Comment = candidate.Comment;
-                _context.Candidates.Update(existingCandidate);
+                await _candidateRepository.UpdateCandidateAsync(existingCandidate);
             }
             else
             {
-                await _context.Candidates.AddAsync(candidate);
+                await _candidateRepository.AddCandidateAsync(candidate);
             }
-            await _context.SaveChangesAsync();
-            _cache.Remove("GetAllCandidates"); // Invalidate the cache
-            _cache.Remove($"Candidate_{candidate.Email}"); // Invalidate the cache
         }
 
         public async Task DeleteCandidateAsync(string email)
         {
-            var candidate = await _context.Candidates.SingleOrDefaultAsync(c => c.Email == email);
-            if (candidate != null)
-            {
-                _context.Candidates.Remove(candidate);
-                await _context.SaveChangesAsync();
-                _cache.Remove("GetAllCandidates"); // Invalidate the cache
-                _cache.Remove($"Candidate_{email}"); // Invalidate the cache
-            }
-        }
-
-        public async Task<IEnumerable<Candidate>> GetAllCandidatesAsync()
-        {
-            if (!_cache.TryGetValue("GetAllCandidates", out IEnumerable<Candidate> candidates))
-            {
-                candidates = await _context.Candidates.ToListAsync();
-                var cacheEntryOptions = new MemoryCacheEntryOptions()
-                    .SetSlidingExpiration(_cacheExpiration);
-                _cache.Set("GetAllCandidates", candidates, cacheEntryOptions);
-            }
-            return candidates;
-        }
-
-        public async Task<Candidate> GetCandidateByEmailAsync(string email)
-        {
-            if (!_cache.TryGetValue($"Candidate_{email}", out Candidate candidate))
-            {
-                candidate = await _context.Candidates.SingleOrDefaultAsync(c => c.Email == email);
-                if (candidate != null)
-                {
-                    var cacheEntryOptions = new MemoryCacheEntryOptions()
-                        .SetSlidingExpiration(_cacheExpiration);
-                    _cache.Set($"Candidate_{email}", candidate, cacheEntryOptions);
-                }
-            }
-            return candidate;
+            await _candidateRepository.DeleteCandidateAsync(email);
         }
     }
 }

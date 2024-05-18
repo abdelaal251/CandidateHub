@@ -1,5 +1,6 @@
 using CandidateHub.API.Data;
 using CandidateHub.API.Interfaces;
+using CandidateHub.API.Repositories;
 using CandidateHub.API.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<ICandidateRepository, CandidateRepository>();
 builder.Services.AddScoped<ICandidateService, CandidateService>();
 builder.Services.AddMemoryCache(); // Add memory caching
 
