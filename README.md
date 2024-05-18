@@ -50,8 +50,8 @@ http://localhost:5098/api/candidates
 ## Endpoints
 
 POST /api/candidates
-- **Descripton:** Adds a new candidate or updates an existing candidate's information based on the email provided.
-- **Parameters:** A candicate object contains first name, last name, email, phone number, etc.
+- **Description:** Adds a new candidate or updates an existing candidate's information based on the email provided.
+- **Parameters:** A candidate object contains first name, last name, email, phone number, etc.
 - **Response:** `200 OK`: If the candidate is successfully added or updated.
 
 GET /api/candidates
@@ -64,7 +64,7 @@ GET /api/candidates/{email}
 
 DELETE /api/candidates/{email}
 - **Description:** Deletes one candidate object.
-- **Response:** `200 OK`: Deletes a one candidate object.
+- **Response:** `200 OK`: Deletes one candidate object.
 
 Error Handling
 **invalid input** `400 bad request`
@@ -126,7 +126,7 @@ This Part provides an overview of the unit tests for the Candidate Hub API. Unit
    - It is assumed that the email provided for each candidate is unique and is used as the primary key for identification.
 
 - **API Endpoint:**
-   - The API is designed with a single endpoint for create and update operations based on the email provided in the request.
+   - The API is designed with a single endpoint for creating and updating operations based on the email provided in the request.
 
 # Deliverables list
 
@@ -144,10 +144,10 @@ This Part provides an overview of the unit tests for the Candidate Hub API. Unit
 
 ## Total Time Spent 
 
-- as per time tracking for each task and subtask during the development process
--- Development (5 hrs).
--- Documentations (1 hrs).
--- Testing (1 hr).
-total time spent to finish the assesment is 7 hours.
+- as per time tracking for each task and subtask during the development process, the total time spent to finish the assessment is 7 hours.
+	- Development (5 hrs).
+	- Documentations (1 hrs).
+	- Testing (1 hr).
+
 
 
